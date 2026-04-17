@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:book_mgmt/widgets/fields/input_field.dart';
 import 'package:book_mgmt/widgets/fields/medium_field_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -57,7 +58,7 @@ class _BookEntry extends State<BookEntry> {
   Widget build(BuildContext context) {
     return Column(
       spacing: 16,
-      mainAxisAlignment: .center,
+      mainAxisAlignment: .start,
       children: [
         TextField(
           onChanged: (v) => _formValues['title'] = v,
@@ -67,6 +68,9 @@ class _BookEntry extends State<BookEntry> {
           onChanged: (v) => _formValues['pages'] = v,
           decoration: InputDecoration(hintText: '# of pages'),
         ),
+
+        NewIndex(),
+
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -74,6 +78,47 @@ class _BookEntry extends State<BookEntry> {
           ),
           onPressed: () => saveFields(context),
           child: Text('Add'),
+        ),
+      ],
+    );
+  }
+}
+
+class NewIndex extends StatelessWidget {
+  const NewIndex({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 2),
+      child: IndexForm(),
+    );
+  }
+}
+
+class IndexForm extends StatelessWidget {
+  const IndexForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextFormField(
+          enabled: false,
+          decoration: InputDecoration(
+            hintText: 'Index Title',
+            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          ),
+        ),
+        TextFormField(
+          enabled: false,
+          decoration: InputDecoration(
+            hintText: 'Index Page',
+            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          ),
         ),
       ],
     );

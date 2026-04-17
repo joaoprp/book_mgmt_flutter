@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/models/auth_model.dart';
+import 'package:book_mgmt/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;

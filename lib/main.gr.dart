@@ -10,10 +10,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i5;
-import 'package:book_mgmt/screens/add_book.dart' as _i1;
-import 'package:book_mgmt/screens/books.dart' as _i2;
-import 'package:book_mgmt/screens/login.dart' as _i3;
-import 'package:book_mgmt/screens/register.dart' as _i4;
+import 'package:book_mgmt/pages/books/add.dart' as _i1;
+import 'package:book_mgmt/pages/books/list.dart' as _i2;
+import 'package:book_mgmt/pages/login.dart' as _i3;
+import 'package:book_mgmt/pages/register.dart' as _i4;
 
 /// generated route for
 /// [_i1.AddBook]
@@ -32,17 +32,17 @@ class AddBook extends _i5.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.Books]
-class Books extends _i5.PageRouteInfo<void> {
-  const Books({List<_i5.PageRouteInfo>? children})
-    : super(Books.name, initialChildren: children);
+/// [_i2.LibraryView]
+class LibraryView extends _i5.PageRouteInfo<void> {
+  const LibraryView({List<_i5.PageRouteInfo>? children})
+    : super(LibraryView.name, initialChildren: children);
 
-  static const String name = 'Books';
+  static const String name = 'LibraryView';
 
   static _i5.PageInfo page = _i5.PageInfo(
     name,
     builder: (data) {
-      return const _i2.Books();
+      return const _i2.LibraryView();
     },
   );
 }
