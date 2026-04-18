@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/widgets/fields/input_field.dart';
+import 'package:book_mgmt/data/register_data.dart';
+import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/widgets/fields/auth_field.dart';
+import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../widgets/fields/index.dart';
 
@@ -32,32 +32,29 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   final _formKey = GlobalKey<FormState>();
-
   final _formData = <String, dynamic>{};
 
+  Map<String, dynamic>? errors = {};
+
   OnChangedCallback _onSaveField(String name) {
-    return (String? value) => _formData[name] = value;
+    return (String? value) {
+      setState(() => errors?[name] = null);
+      _formData[name] = value;
+    };
   }
 
   Future<void> _submitForm(BuildContext ctx) async {
     var router = ctx.router;
+    var messenger = ScaffoldMessenger.of(ctx);
 
-    var response = await register();
+    try {
+      await register(_formData);
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      router.pushPath('/');
-    } else {
-      throw Exception("Can't Register");
+      router.replacePath('/');
+    } on HttpClientException catch (e) {
+      setState(() => errors = e.message?['errors']);
+      Alert.error(messenger, e.message?['message']);
     }
-  }
-
-  Future<http.Response> register() {
-    var url = Uri.parse('http://localhost:8000/api/register');
-    return http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(_formData),
-    );
   }
 
   @override
@@ -68,13 +65,27 @@ class _MyFormState extends State<MyForm> {
         spacing: 16,
         mainAxisAlignment: .center,
         children: [
-          InputField(onChanged: _onSaveField('name'), hint: 'Enter your Name'),
-          EmailField(onChanged: _onSaveField('email')),
-          PasswordField(onChanged: _onSaveField('password')),
-          InputField(
+          AuthField(
+            'Enter your Name',
+            onChanged: _onSaveField('name'),
+            errorMessage: errors?['name'],
+          ),
+          AuthField(
+            'Enter your e-mail',
+            onChanged: _onSaveField('email'),
+            errorMessage: errors?['email'],
+          ),
+          AuthField(
+            'Password',
+            onChanged: _onSaveField('password'),
+            errorMessage: errors?['password'],
+            protected: true,
+          ),
+          AuthField(
+            'Confirm your password',
             onChanged: _onSaveField('password_confirmation'),
-            hint: 'Confirm your password',
-            obscureText: true,
+            errorMessage: errors?['password_confirmation'],
+            protected: true,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(

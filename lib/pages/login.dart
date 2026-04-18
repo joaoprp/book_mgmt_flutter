@@ -50,7 +50,7 @@ class _MyFormState extends State<MyForm> {
     try {
       await authenticate(_formData);
 
-      router.pushPath('/books');
+      router.replacePath('/books');
     } on HttpClientException catch (e) {
       setState(() => errors = e.message?['errors']);
 
