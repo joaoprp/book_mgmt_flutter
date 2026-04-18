@@ -1,6 +1,7 @@
-import 'package:book_mgmt/widgets/fields/index.dart';
 import 'package:book_mgmt/widgets/fields/medium_field_wrapper.dart';
 import 'package:flutter/material.dart';
+
+typedef OnChangedCallback = void Function(String? value)?;
 
 class AuthField extends StatelessWidget {
   final List<dynamic>? errorMessage;

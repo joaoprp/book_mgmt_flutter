@@ -5,8 +5,6 @@ import 'package:book_mgmt/widgets/fields/auth_field.dart';
 import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/fields/index.dart';
-
 @RoutePage()
 class Register extends StatelessWidget {
   const Register({super.key});
