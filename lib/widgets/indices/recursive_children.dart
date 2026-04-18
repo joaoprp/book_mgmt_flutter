@@ -1,4 +1,4 @@
-import 'package:book_mgmt/models/book.dart';
+import 'package:book_mgmt/models/indice.dart';
 import 'package:flutter/material.dart';
 
 class Children extends StatelessWidget {
@@ -8,16 +8,14 @@ class Children extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(left: 4),
       child: Column(
         children: [
           for (var child in children!)
             ListTile(
               title: Row(
-                children: [
-                  Icon(Icons.keyboard_arrow_right_rounded),
-                  Text(child.title),
-                ],
+                spacing: 4,
+                children: [Icon(Icons.circle, size: 8), Text(child.title)],
               ),
               subtitle: child.children == null
                   ? null

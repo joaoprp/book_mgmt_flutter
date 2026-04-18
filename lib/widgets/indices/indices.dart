@@ -1,4 +1,4 @@
-import 'package:book_mgmt/models/book.dart';
+import 'package:book_mgmt/models/indice.dart';
 import 'package:book_mgmt/widgets/indices/recursive_children.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +13,8 @@ class Indices extends StatelessWidget {
         for (var index in indices)
           ListTile(
             title: Row(
-              children: [
-                Icon(Icons.keyboard_arrow_right_rounded),
-                Text(index.title),
-              ],
+              spacing: 4,
+              children: [Icon(Icons.circle, size: 8), Text(index.title)],
             ),
             subtitle: index.children == null
                 ? null

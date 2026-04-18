@@ -42,6 +42,14 @@ class _LibraryView extends State<LibraryView> {
     super.dispose();
   }
 
+  void onDelete(Book book) async {
+    await deleteBook(book.id);
+
+    setState(() {
+      data.remove(book);
+    });
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
@@ -67,7 +75,7 @@ class _LibraryView extends State<LibraryView> {
               suffixIcon: Icon(Icons.search),
             ),
           ),
-          for (var book in data) BookEntry(book: book),
+          for (var book in data) BookEntry(book, onDelete: onDelete),
         ],
       ),
     );
@@ -76,15 +84,54 @@ class _LibraryView extends State<LibraryView> {
 
 class BookEntry extends StatelessWidget {
   final Book book;
-  const BookEntry({super.key, required this.book});
+  final Function onDelete;
+  const BookEntry(this.book, {super.key, required this.onDelete});
 
   @override
   Widget build(BuildContext ctx) {
     return ExpansionTile(
+      expandedCrossAxisAlignment: .start,
       minTileHeight: 80,
-      title: Text(book.title),
-      subtitle: Text(book.user.name),
-      children: [Indices(indices: book.indexes!)],
+      title: Row(
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Text(book.title),
+          IconButton(
+            onPressed: () {
+              final snackBar = SnackBar(
+                content: Text(
+                  'Book with name ${book.title} and id ${book.id} removed successfully',
+                ),
+                backgroundColor: Colors.green,
+                behavior: .floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              );
+              onDelete(book);
+              ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ],
+      ),
+      subtitle: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Text('Author: ${book.user.name}'),
+          Text('Pages: ${book.pages}'),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14),
+          child: Text(
+            'Chapters',
+            style: TextStyle(fontSize: 18, fontWeight: .bold),
+          ),
+        ),
+        Indices(indices: book.indexes!),
+      ],
     );
   }
 }

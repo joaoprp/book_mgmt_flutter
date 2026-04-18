@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/models/auth.dart';
+import 'package:book_mgmt/data/login_data.dart';
+import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/widgets/fields/auth_field.dart';
+import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 
 import '../widgets/fields/index.dart';
 
@@ -33,39 +32,30 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   final _formKey = GlobalKey<FormState>();
-
   final _formData = <String, dynamic>{};
 
+  Map<String, dynamic>? errors = {};
+
   OnChangedCallback _onSaveField(String name) {
-    return (String? value) => _formData[name] = value;
+    return (String? value) {
+      setState(() => errors?[name] = null);
+      _formData[name] = value;
+    };
   }
 
   Future<void> _submitForm(BuildContext ctx) async {
     var router = ctx.router;
+    var messenger = ScaffoldMessenger.of(ctx);
 
-    final storage = FlutterSecureStorage();
-    var response = await login();
-
-    if (response.statusCode == 200) {
-      var auth = AuthModel.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>,
-      );
-
-      await storage.write(key: 'token', value: auth.token);
+    try {
+      await authenticate(_formData);
 
       router.pushPath('/books');
-    } else {
-      throw Exception("Can't Login");
-    }
-  }
+    } on HttpClientException catch (e) {
+      setState(() => errors = e.message?['errors']);
 
-  Future<http.Response> login() {
-    var url = Uri.parse('http://localhost:8000/api/login');
-    return http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(_formData),
-    );
+      Alert.error(messenger, e.message?['message'] as String);
+    }
   }
 
   @override
@@ -76,32 +66,51 @@ class _MyFormState extends State<MyForm> {
         spacing: 16,
         mainAxisAlignment: .center,
         children: [
-          EmailField(onChanged: _onSaveField('email')),
-          PasswordField(onChanged: _onSaveField('password')),
-          Row(
-            spacing: 16,
-            mainAxisAlignment: .center,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => _submitForm(ctx),
-                child: Text('Login'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => ctx.router.pushPath('/register'),
-                child: Text('Register'),
-              ),
-            ],
+          AuthField(
+            'Enter your e-mail',
+            onChanged: _onSaveField('email'),
+            errorMessage: errors?['email'],
           ),
+          AuthField(
+            'Password',
+            onChanged: _onSaveField('password'),
+            errorMessage: errors?['password'],
+            protected: true,
+          ),
+          LoginButtons(submit: () => _submitForm(ctx)),
         ],
       ),
+    );
+  }
+}
+
+class LoginButtons extends StatelessWidget {
+  final VoidCallback submit;
+  const LoginButtons({super.key, required this.submit});
+
+  @override
+  Widget build(BuildContext ctx) {
+    return Row(
+      spacing: 16,
+      mainAxisAlignment: .center,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
+          onPressed: submit,
+          child: Text('Login'),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
+          onPressed: () => ctx.router.pushPath('/register'),
+          child: Text('Register'),
+        ),
+      ],
     );
   }
 }

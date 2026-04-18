@@ -26,10 +26,20 @@ List<Book> decodeResponse(Response response) {
 }
 
 Future<List<Book>> fetchBooks([String? query]) async {
-  Response response = await client.get(query);
+  Response response = await client.get();
 
   List<dynamic> decoded = jsonDecode(response.body);
   var mapped = decoded.map((entry) => Book.fromJson(entry));
 
   return mapped.toList();
+}
+
+Future<bool> deleteBook(int id) async {
+  Response response = await client.delete(id);
+
+  if (response.statusCode != 204) {
+    throw Exception("Can't delete.");
+  }
+
+  return true;
 }
