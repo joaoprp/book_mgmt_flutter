@@ -17,7 +17,7 @@ class AddBook extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Book Management'),
       ),
-      body: Center(child: MediumField(child: BookEntry())),
+      body: Center(child: MediumField(BookEntry())),
     );
   }
 }

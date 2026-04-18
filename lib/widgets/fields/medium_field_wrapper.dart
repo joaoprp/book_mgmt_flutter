@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MediumField extends StatelessWidget {
-  const MediumField({super.key, required this.child});
-
   final Widget child;
+
+  const MediumField(this.child, {super.key});
 
   @override
   Widget build(BuildContext context) {

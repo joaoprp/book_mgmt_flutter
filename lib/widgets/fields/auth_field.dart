@@ -20,7 +20,7 @@ class AuthField extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return MediumField(
-      child: TextFormField(
+      TextFormField(
         obscureText: protected,
         onChanged: onChanged,
         decoration: InputDecoration(
