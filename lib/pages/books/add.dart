@@ -1,55 +1,35 @@
-import 'dart:convert';
-
-import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/widgets/fields/medium_field_wrapper.dart';
+import 'package:book_mgmt/data/book_data.dart';
+import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 
-@RoutePage()
-class AddBook extends StatelessWidget {
-  const AddBook({super.key});
+class AddBook extends StatefulWidget {
+  final Function callback;
+  const AddBook({super.key, required this.callback});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Book Management'),
-      ),
-      body: Center(child: MediumField(BookEntry())),
-    );
-  }
+  State<AddBook> createState() => _AddBook();
 }
 
-class BookEntry extends StatefulWidget {
-  const BookEntry({super.key});
-
-  @override
-  State<BookEntry> createState() => _BookEntry();
-}
-
-class _BookEntry extends State<BookEntry> {
+class _AddBook extends State<AddBook> {
   final _formValues = <String, dynamic>{};
 
+  Map<String, dynamic>? errors = {};
+
   Future<void> saveFields(BuildContext context) async {
-    var router = context.router;
+    var state = ScaffoldMessenger.of(context);
+    try {
+      await addBook(_formValues);
 
-    final storage = FlutterSecureStorage();
+      Alert.success(state, 'Book added successfully!');
 
-    var token = await storage.read(key: 'token');
+      widget.callback();
+    } on HttpClientException catch (e) {
+      setState(() => errors = e.message?['errors']);
 
-    var response = await http.post(
-      Uri.parse('http://localhost:8000/api/books'),
-      body: jsonEncode(_formValues),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode == 201) {
-      router.pushPath('/books');
+      Alert.error(state, e.message.toString());
+    } catch (e) {
+      Alert.error(state, e.toString());
     }
   }
 
@@ -61,11 +41,17 @@ class _BookEntry extends State<BookEntry> {
       children: [
         TextField(
           onChanged: (v) => _formValues['title'] = v,
-          decoration: InputDecoration(hintText: 'Book Title'),
+          decoration: InputDecoration(
+            hintText: 'Book Title',
+            errorText: errors?['title']?.join('\n'),
+          ),
         ),
         TextField(
           onChanged: (v) => _formValues['pages'] = v,
-          decoration: InputDecoration(hintText: '# of pages'),
+          decoration: InputDecoration(
+            hintText: '# of pages',
+            errorText: errors?['pages']?.join('\n'),
+          ),
         ),
 
         NewIndex(),

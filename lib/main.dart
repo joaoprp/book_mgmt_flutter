@@ -30,6 +30,5 @@ class AppRouter extends RootStackRouter {
     AutoRoute(path: '/', page: Login.page, initial: true),
     AutoRoute(path: '/register', page: Register.page),
     AutoRoute(path: '/books', page: LibraryView.page, guards: [AuthGuard()]),
-    AutoRoute(path: '/books/add', page: AddBook.page, guards: [AuthGuard()]),
   ];
 }

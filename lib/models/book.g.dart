@@ -8,9 +8,11 @@ part of 'book.dart';
 
 Book _$BookFromJson(Map<String, dynamic> json) => Book(
   id: (json['id'] as num).toInt(),
-  user: User.fromJson(json['user'] as Map<String, dynamic>),
   title: json['title'] as String,
-  pages: (json['pages'] as num).toInt(),
+  pages: Book._intFromString(json['pages']),
+  user: json['user'] == null
+      ? null
+      : User.fromJson(json['user'] as Map<String, dynamic>),
   indexes: (json['indexes'] as List<dynamic>?)
       ?.map((e) => Index.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -37,7 +39,7 @@ const _$BookJsonSchema = {
       'items': {r'$ref': r'#/$defs/Index'},
     },
   },
-  'required': ['id', 'user', 'title', 'pages'],
+  'required': ['id', 'title', 'pages'],
   r'$defs': {
     'User': {
       'type': 'object',
