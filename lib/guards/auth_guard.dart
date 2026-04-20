@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:book_mgmt/core/enums/index.dart';
 import 'package:book_mgmt/main.gr.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -10,9 +11,7 @@ class AuthGuard extends AutoRouteGuard {
   ) async {
     final storage = FlutterSecureStorage();
 
-    var token = await storage.read(key: 'token');
-
-    if (token?.isNotEmpty ?? false) {
+    if (await storage.containsKey(key: StorageKey.token.name)) {
       // if user is authenticated we continue
       resolver.next(true);
     } else {

@@ -5,6 +5,8 @@ import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/helpers/debounce.dart';
 import 'package:book_mgmt/models/book.dart';
 import 'package:book_mgmt/pages/books/add.dart';
+import 'package:book_mgmt/widgets/app_scaffold.dart';
+import 'package:book_mgmt/widgets/fields/search.dart';
 import 'package:book_mgmt/widgets/indices/indices.dart';
 import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
@@ -81,13 +83,8 @@ class _LibraryView extends State<LibraryView> {
   }
 
   @override
-  Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(ctx).colorScheme.inversePrimary,
-        title: Text('Book Management'),
-        actions: [],
-      ),
+  Widget build(BuildContext context) {
+    return AppScaffold(
       body: Stack(
         children: [
           ListView(
@@ -137,7 +134,6 @@ class _LibraryView extends State<LibraryView> {
         ],
       ),
       floatingActionButton: IconButton(
-        // onPressed: () => ctx.router.pushPath('/books/add'),
         onPressed: toggleAnimation,
         iconSize: 40,
         icon: AnimatedRotation(
@@ -146,7 +142,7 @@ class _LibraryView extends State<LibraryView> {
           child: const Icon(Icons.add),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(ctx).colorScheme.inversePrimary,
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
       ),
     );
@@ -204,22 +200,6 @@ class BookEntry extends StatelessWidget {
         ),
         Indices(indices: book.indexes!),
       ],
-    );
-  }
-}
-
-class SearchBox extends StatelessWidget {
-  final TextEditingController controller;
-  const SearchBox({super.key, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: 'Type to search...',
-        suffixIcon: Icon(Icons.search),
-      ),
     );
   }
 }

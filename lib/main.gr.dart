@@ -10,7 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:book_mgmt/pages/books/list.dart' as _i1;
+import 'package:book_mgmt/features/books/list.dart' as _i1;
 import 'package:book_mgmt/pages/login.dart' as _i2;
 import 'package:book_mgmt/pages/register.dart' as _i3;
 
