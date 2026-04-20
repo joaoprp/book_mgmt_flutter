@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/data/book_data.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/core/exceptions/http/index.dart';
+import 'package:book_mgmt/services/book_service.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/helpers/debounce.dart';
 import 'package:book_mgmt/models/book.dart';
 import 'package:book_mgmt/pages/books/add.dart';
@@ -25,9 +26,18 @@ class _LibraryView extends State<LibraryView> {
   double turns = 0.0;
 
   void _performSearch([String? query]) async {
-    var books = await fetchBooks(query);
-
-    setState(() => data = books);
+    try {
+      var books = await fetchBooks(query);
+      setState(() => data = books);
+    } on HttpUnauthorizedException {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        Alert.error(
+          ScaffoldMessenger.of(context),
+          'Unauthorized. Redirected to login',
+        );
+        context.router.replacePath('/');
+      });
+    }
   }
 
   @override
@@ -171,8 +181,6 @@ class BookEntry extends StatelessWidget {
                   messenger,
                   'Unable to delete. Book likely to be removed from database already. Refresh your data and try again.',
                 );
-              } catch (e) {
-                Alert.error(messenger, 'Internal Server Error.');
               }
             },
             icon: Icon(Icons.delete),

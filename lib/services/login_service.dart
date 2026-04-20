@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:book_mgmt/data/api_client.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/services/api_client.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/models/auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-String path = 'login';
-var client = ApiClient(path: path);
+var client = ApiClient('login', tokenize: false);
 
 Auth formatter(String body) {
   var auth = Auth.fromJson(jsonDecode(body) as Map<String, dynamic>);

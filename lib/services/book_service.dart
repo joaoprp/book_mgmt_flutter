@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:book_mgmt/data/api_client.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/services/api_client.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/models/book.dart';
 import 'package:http/http.dart';
 
-String path = 'books';
-var client = ApiClient(path: path);
+var client = ApiClient('books');
 
 Book format(dynamic json) {
   return Book.fromJson(json);

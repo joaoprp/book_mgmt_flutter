@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:book_mgmt/data/register_data.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/services/register_service.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/widgets/fields/auth_field.dart';
 import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';

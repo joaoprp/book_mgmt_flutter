@@ -1,8 +1,7 @@
-import 'package:book_mgmt/data/api_client.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/services/api_client.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 
-String path = 'register';
-var client = ApiClient(path: path);
+var client = ApiClient('register');
 
 bool formatter(String body) {
   return true;

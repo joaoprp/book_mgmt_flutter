@@ -1,5 +1,5 @@
-import 'package:book_mgmt/data/book_data.dart';
-import 'package:book_mgmt/data/response_validator.dart';
+import 'package:book_mgmt/services/book_service.dart';
+import 'package:book_mgmt/helpers/response_validator.dart';
 import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
 
@@ -69,43 +69,109 @@ class _AddBook extends State<AddBook> {
   }
 }
 
-class NewIndex extends StatelessWidget {
+class NewIndex extends StatefulWidget {
   const NewIndex({super.key});
 
   @override
+  State<NewIndex> createState() => _NewIndexState();
+}
+
+class _NewIndexState extends State<NewIndex> {
+  final List<Color?> _bgColors = [];
+  List<IndexForm> indices = [];
+
+  void removeIndex(IndexForm idx) {
+    setState(() {
+      int pos = indices.indexOf(idx);
+      indices.remove(idx);
+      _bgColors.removeAt(pos);
+
+      int k = 0;
+      for (var c in _bgColors) {
+        // final (k, v) = action;
+
+        if (c == indices[k].bgColor) {
+          print('match c and k');
+        }
+
+        c = k % 2 == 0 ? Colors.grey[100] : Colors.white;
+        k++;
+      }
+    });
+
+    for (var f in indices) {
+      print(f.bgColor);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 1),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 2),
-      child: IndexForm(),
+    return Column(
+      spacing: 5,
+      children: [
+        ...indices,
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _bgColors.add(
+                _bgColors.length % 2 == 0 ? Colors.grey[100] : Colors.white,
+              );
+              indices.add(
+                IndexForm(
+                  onDelete: removeIndex,
+                  bgColor: _bgColors[indices.length],
+                ),
+              );
+            });
+          },
+          icon: Icon(Icons.add),
+        ),
+      ],
     );
   }
 }
 
 class IndexForm extends StatelessWidget {
-  const IndexForm({super.key});
+  final Function onDelete;
+  final Color? bgColor;
+
+  const IndexForm({super.key, required this.onDelete, this.bgColor});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          enabled: false,
-          decoration: InputDecoration(
-            hintText: 'Index Title',
-            contentPadding: EdgeInsets.symmetric(horizontal: 5),
-          ),
+    return Container(
+      padding: .all(10),
+      color: bgColor,
+      child: Expanded(
+        child: Row(
+          spacing: 10,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: .min,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Index Title',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Index Page',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: () => onDelete(this),
+              icon: Icon(Icons.delete),
+            ),
+          ],
         ),
-        TextFormField(
-          enabled: false,
-          decoration: InputDecoration(
-            hintText: 'Index Page',
-            contentPadding: EdgeInsets.symmetric(horizontal: 5),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
