@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:book_mgmt/core/enums/index.dart';
 import 'package:book_mgmt/services/api_client.dart';
-import 'package:book_mgmt/helpers/response_validator.dart';
+import 'package:book_mgmt/utils/helpers/response_validator.dart';
 import 'package:book_mgmt/models/auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

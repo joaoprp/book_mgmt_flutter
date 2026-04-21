@@ -1,5 +1,5 @@
 import 'package:book_mgmt/services/book_service.dart';
-import 'package:book_mgmt/helpers/response_validator.dart';
+import 'package:book_mgmt/utils/helpers/response_validator.dart';
 import 'package:book_mgmt/widgets/notification.dart';
 import 'package:flutter/material.dart';
 

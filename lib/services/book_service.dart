@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:book_mgmt/services/api_client.dart';
-import 'package:book_mgmt/helpers/response_validator.dart';
+import 'package:book_mgmt/utils/helpers/response_validator.dart';
 import 'package:book_mgmt/models/book.dart';
 import 'package:http/http.dart';
 

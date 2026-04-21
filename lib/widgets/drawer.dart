@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 
-import 'package:book_mgmt/services/login_service.dart';
+import 'package:book_mgmt/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

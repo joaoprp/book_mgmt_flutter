@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:book_mgmt/helpers/token_client.dart';
+import 'package:book_mgmt/utils/helpers/token_client.dart';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
